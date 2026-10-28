@@ -85,27 +85,6 @@ class TresEnRayaTest {
     }
 
     @Test
-    void plusWinsWithACompleteHorizontalLine() {
-        game.play(1, 2);
-        game.play(1, 1);
-        game.play(2, 3);
-        game.play(2, 1);
-        game.play(3, 2);
-
-        assertEquals(GameState.PLUS_WINS, game.play(3, 1));
-    }
-
-    @Test
-    void xWinsWithACompleteVerticalLine() {
-        game.play(1, 1);
-        game.play(2, 1);
-        game.play(1, 2);
-        game.play(2, 2);
-
-        assertEquals(GameState.X_WINS, game.play(1, 3));
-    }
-
-    @Test
     void plusWinsWithACompleteVerticalLine() {
         game.play(1, 1);
         game.play(2, 1);

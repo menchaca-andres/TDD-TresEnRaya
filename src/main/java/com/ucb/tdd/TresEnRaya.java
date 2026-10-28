@@ -10,6 +10,17 @@ public final class TresEnRaya {
     private static final char X = 'X';
     private static final char PLUS = '+';
 
+    private static final int[][] WINNING_LINES = {
+            {0, 0, 1, 0, 2, 0},
+            {0, 1, 1, 1, 2, 1},
+            {0, 2, 1, 2, 2, 2},
+            {0, 0, 0, 1, 0, 2},
+            {1, 0, 1, 1, 1, 2},
+            {2, 0, 2, 1, 2, 2},
+            {0, 0, 1, 1, 2, 2},
+            {0, 2, 1, 1, 2, 0}
+    };
+
     private final char[][] board;
     private char currentPlayer;
     private GameState state;
@@ -25,10 +36,6 @@ public final class TresEnRaya {
 
     public char currentPlayer() {
         return currentPlayer;
-    }
-
-    public GameState state() {
-        return state;
     }
 
     public char pieceAt(int x, int y) {
@@ -59,34 +66,30 @@ public final class TresEnRaya {
     }
 
     private void validateCoordinates(int x, int y) {
-        if (x < 1 || x > BOARD_SIZE) {
+        validateCoordinate("x", x);
+        validateCoordinate("y", y);
+    }
+
+    private void validateCoordinate(String axis, int value) {
+        if (value < 1 || value > BOARD_SIZE) {
             throw new IllegalArgumentException(
-                    "Coordinate x=" + x + " is outside the board");
-        }
-        if (y < 1 || y > BOARD_SIZE) {
-            throw new IllegalArgumentException(
-                    "Coordinate y=" + y + " is outside the board");
+                    "Coordinate " + axis + "=" + value + " is outside the board");
         }
     }
 
     private boolean hasWon(char player) {
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            if (board[i][0] == player && board[i][1] == player && board[i][2] == player) {
-                return true;
-            }
-            if (board[0][i] == player && board[1][i] == player && board[2][i] == player) {
+        for (int[] line : WINNING_LINES) {
+            if (isLine(player, line)) {
                 return true;
             }
         }
+        return false;
+    }
 
-        boolean mainDiagonal = board[0][0] == player
-                && board[1][1] == player
-                && board[2][2] == player;
-        boolean antiDiagonal = board[0][2] == player
-                && board[1][1] == player
-                && board[2][0] == player;
-
-        return mainDiagonal || antiDiagonal;
+    private boolean isLine(char player, int[] line) {
+        return board[line[0]][line[1]] == player
+                && board[line[2]][line[3]] == player
+                && board[line[4]][line[5]] == player;
     }
 
     private boolean isFull() {
